@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>진짜일까? AI일까? | 지아의 디지털 놀이터</title>
+<meta property="og:title" content="진짜일까? AI일까? 사진 10문제 도전">
+<link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#fdf3ef;--ink:#4a3b33;--pink:#f7c6cf;--pinkd:#e98a9a;--mint:#bfe6cf;--mintd:#4f9b72;--card:#fff;--line:#efdcd3}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Gowun Dodum',sans-serif;min-height:100vh;display:flex;justify-content:center}
+.wrap{width:100%;max-width:440px;padding:18px 16px 28px}
+.scr{display:none}.scr.on{display:block}
+h1{font-size:30px;margin:6px 0 4px;text-align:center}
+.sub{text-align:center;opacity:.8;margin:0 0 14px}
+.jia{display:block;width:130px;height:130px;margin:14px auto 6px;border-radius:50%;background:var(--pink)}
+.bubble{background:#fff;border:2px solid var(--line);border-radius:18px;padding:12px 16px;margin:8px 0 16px;text-align:center;line-height:1.6}
+.rule{background:#fff;border-radius:16px;padding:12px 16px;line-height:1.8;font-size:15px}
+.btn{display:block;width:100%;border:0;border-radius:16px;padding:16px;font-family:inherit;font-size:19px;font-weight:bold;cursor:pointer;margin-top:12px;color:#fff;background:#8a6a5a}
+.btn.light{background:#fff;color:var(--ink);border:2px solid var(--line)}
+.top{display:flex;justify-content:space-between;align-items:center;font-size:16px;margin-bottom:8px}
+.bar{height:10px;background:#fff;border-radius:99px;overflow:hidden;margin-bottom:10px}.bar i{display:block;height:100%;background:var(--pinkd);width:0;transition:width .3s}
+.photo{position:relative;width:100%;aspect-ratio:4/5;border-radius:18px;overflow:hidden;background:#ddd;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+.photo img{width:100%;height:100%;object-fit:cover;display:block}
+.q{text-align:center;font-size:20px;margin:12px 0 4px}
+.choices{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.choice{border:0;border-radius:16px;padding:16px 6px;font-family:inherit;font-size:21px;font-weight:bold;cursor:pointer;color:var(--ink)}
+.c-real{background:var(--mint)}.c-ai{background:var(--pink)}
+.choice:disabled{opacity:.45}
+.fb{display:none;margin-top:12px;background:#fff;border-radius:16px;padding:14px 16px;border:3px solid var(--line);text-align:center;line-height:1.6}
+.fb.ok{border-color:var(--mintd)}.fb.no{border-color:var(--pinkd)}
+#fbt{font-size:22px;display:block;margin-bottom:2px}
+.score{font-size:58px;text-align:center;margin:8px 0 0;font-weight:bold}
+.score small{font-size:24px}
+.mom{text-align:center;background:#fff;border-radius:14px;padding:10px;margin:10px 0}
+.tip{background:#fff7d6;border-radius:16px;padding:14px 16px;line-height:1.7;margin-top:14px}
+.copied{text-align:center;font-size:14px;min-height:20px;margin-top:6px}
+footer{text-align:center;font-size:13px;opacity:.7;margin-top:22px;line-height:1.6}
+a.btn{text-decoration:none;text-align:center}
+</style></head><body><div class="wrap">
+
+<section id="s-start" class="scr on">
+ <img class="jia" src="jia.png" alt="지아">
+ <h1>진짜일까? AI일까?</h1>
+ <p class="sub">지아의 사진 10문제 도전</p>
+ <div class="bubble">엄마한테 0승 2패 당한 지아의 복수전!<br>이 중엔 <b>내가 직접 찍은 사진</b>도 있고<br><b>AI가 만든 사진</b>도 있어요 😏</div>
+ <div class="rule">📷 직접 찍은 사진이면 <b>진짜</b><br>🤖 AI가 만든 사진이면 <b>AI</b><br>🎲 할 때마다 문제가 바뀌어요</div>
+ <button class="btn" id="go">도전 시작!</button>
+</section>
+
+<section id="s-play" class="scr">
+ <div class="top"><span id="num">1 / 10</span><span id="pt">맞힌 개수 0</span></div>
+ <div class="bar"><i id="bar"></i></div>
+ <div class="photo"><img id="img" alt="문제 사진"></div>
+ <p class="q">이 사진은?</p>
+ <div class="choices">
+  <button class="choice c-real" data-a="1">📷 진짜</button>
+  <button class="choice c-ai" data-a="0">🤖 AI</button>
+ </div>
+ <div class="fb" id="fb"><b id="fbt"></b><span id="fbd"></span></div>
+ <button class="btn" id="next" style="display:none">다음 문제</button>
+</section>
+
+<section id="s-end" class="scr">
+ <img class="jia" src="jia.png" alt="지아">
+ <p class="sub">나의 결과</p>
+ <div class="score"><span id="final">0</span><small> / 10</small></div>
+ <div class="bubble" id="msg"></div>
+ <div class="mom">👩 엄마 점수: <b>10 / 10</b> 😇</div>
+ <div class="tip"><b>💡 지아가 배운 것</b><br>요즘 AI 사진은 눈으로 보고 맞히기 어려워요.<br>사진보다 <b>누가, 어디서 올렸는지</b> 출처를 먼저 확인하기!</div>
+ <button class="btn" id="copy">결과 복사해서 자랑하기</button>
+ <div class="copied" id="copied"></div>
+ <button class="btn light" id="again">다시 도전!</button>
+ <a class="btn light" href="https://www.instagram.com/jia.mediatoon/" target="_blank" rel="noopener">📸 지아의 디지털 일상툰 보러 가기</a>
+</section>
+
+<footer>지아의 디지털 일상툰 · 진짜일까 AI일까 게임<br>로그인 · 설치 · 개인정보 수집 없는 무료 게임</footer>
+</div>
+<script>
+const ITEMS=[{"f": "img/q01.jpg", "r": false, "t": "안개 속 돌 거북 출렁다리"}, {"f": "img/q02.jpg", "r": true, "t": "물기 맺힌 체리"}, {"f": "img/q03.jpg", "r": false, "t": "유리 식물원 돌길"}, {"f": "img/q04.jpg", "r": false, "t": "물결 모양 옥상 정원"}, {"f": "img/q05.jpg", "r": false, "t": "꽃게 해물탕"}, {"f": "img/q06.jpg", "r": true, "t": "석조전과 분수"}, {"f": "img/q07.jpg", "r": true, "t": "동그란 원형 정원"}, {"f": "img/q08.jpg", "r": false, "t": "물기 맺힌 딸기"}, {"f": "img/q09.jpg", "r": true, "t": "밤하늘 석탑과 초승달"}, {"f": "img/q10.jpg", "r": true, "t": "가로등 위 갈매기"}, {"f": "img/q11.jpg", "r": false, "t": "빌딩 사이 옛 건물"}, {"f": "img/q12.jpg", "r": false, "t": "겹벚꽃 그늘막"}, {"f": "img/q13.jpg", "r": false, "t": "밤하늘 석등과 초승달"}, {"f": "img/q14.jpg", "r": true, "t": "안개 낀 호수와 산"}, {"f": "img/q15.jpg", "r": true, "t": "도자기 조각 장식 벽"}, {"f": "img/q16.jpg", "r": false, "t": "비행기 창밖 구름과 바다"}, {"f": "img/q17.jpg", "r": true, "t": "야자수 온실"}, {"f": "img/q18.jpg", "r": true, "t": "천장 가득한 빨간 등불"}, {"f": "img/q19.jpg", "r": false, "t": "빗방울 너머 강마을"}, {"f": "img/q20.jpg", "r": false, "t": "천장 가득한 한지 등"}, {"f": "img/q21.jpg", "r": true, "t": "등나무꽃 그늘막"}, {"f": "img/q22.jpg", "r": false, "t": "호수 음악 분수"}, {"f": "img/q23.jpg", "r": true, "t": "비행기 창밖 섬"}, {"f": "img/q24.jpg", "r": false, "t": "푸른 타일 모자이크 벽"}, {"f": "img/q25.jpg", "r": false, "t": "빨간 등대 위 갈매기"}, {"f": "img/q26.jpg", "r": true, "t": "무지개 분수"}, {"f": "img/q27.jpg", "r": true, "t": "문어 해물탕"}, {"f": "img/q28.jpg", "r": true, "t": "안개 속 거대한 손 다리"}];
+const N=10;let qs=[],i=0,score=0;
+const $=id=>document.getElementById(id);
+function show(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));$(id).classList.add('on');window.scrollTo(0,0)}
+function shuffle(a){for(let k=a.length-1;k>0;k--){const j=Math.floor(Math.random()*(k+1));[a[k],a[j]]=[a[j],a[k]]}return a}
+function start(){
+ const r=shuffle(ITEMS.filter(x=>x.r)),f=shuffle(ITEMS.filter(x=>!x.r));
+ qs=shuffle(r.slice(0,5).concat(f.slice(0,5)));i=0;score=0;show('s-play');load();
+}
+function load(){
+ const q=qs[i];$('img').src=q.f;$('num').textContent=(i+1)+' / '+N;$('pt').textContent='맞힌 개수 '+score;
+ $('bar').style.width=(i/N*100)+'%';$('fb').style.display='none';$('next').style.display='none';
+ document.querySelectorAll('.choice').forEach(b=>b.disabled=false);
+ if(qs[i+1]){const p=new Image();p.src=qs[i+1].f}
+}
+function answer(a){
+ const q=qs[i],ok=(a===(q.r?1:0));if(ok)score++;
+ document.querySelectorAll('.choice').forEach(b=>b.disabled=true);
+ const fb=$('fb');fb.className='fb '+(ok?'ok':'no');fb.style.display='block';
+ $('fbt').textContent=ok?'⭕ 정답!':'❌ 아쉬워요!';
+ $('fbd').innerHTML=q.r?'📷 <b>진짜</b> 사진이에요.<br>지아가 직접 찍은 「'+q.t+'」':'🤖 <b>AI</b>가 만든 사진이에요.<br>프롬프트 주제: 「'+q.t+'」';
+ $('pt').textContent='맞힌 개수 '+score;$('bar').style.width=((i+1)/N*100)+'%';
+ $('next').textContent=(i+1<N)?'다음 문제':'결과 보기';$('next').style.display='block';$('next').scrollIntoView({behavior:'smooth',block:'end'});
+}
+function next(){i++;if(i<N)load();else end()}
+function end(){
+ $('final').textContent=score;
+ const m=score===10?'만점! 엄마랑 동점이에요 🎉<br>당신은 진정한 AI 감별사!':score>=8?'거의 다 맞혔어요! 👏<br>지아보다 훨씬 잘하는데요?':score>=5?'반은 맞혔어요! 🤔<br>헷갈리는 게 정상이에요.':'지아랑 같은 편이네요 😂<br>AI 사진, 정말 헷갈리죠?';
+ $('msg').innerHTML=m;$('copied').textContent='';show('s-end');
+}
+function copyResult(){
+ const url=location.href.split('#')[0];
+ const t='📸 진짜일까? AI일까?\n나는 10문제 중 '+score+'개 맞혔다! (엄마는 10개 😇)\n너도 도전 👉 '+url;
+ const done=()=>$('copied').textContent='복사됐어요! 친구에게 붙여 넣어 보세요 ✨';
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done).catch(()=>fallback(t,done))}else fallback(t,done);
+}
+function fallback(t,done){const ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');done()}catch(e){$('copied').textContent='복사가 안 되면 화면을 캡처해 주세요!'}ta.remove()}
+$('go').onclick=start;$('again').onclick=start;$('next').onclick=next;$('copy').onclick=copyResult;
+document.querySelectorAll('.choice').forEach(b=>b.onclick=()=>answer(+b.dataset.a));
+</script></body></html>
